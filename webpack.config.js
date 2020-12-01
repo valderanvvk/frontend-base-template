@@ -15,20 +15,37 @@ const TerserPlugin = require("terser-webpack-plugin");
 const isDev = process.env.NODE_ENV === 'development'
 const isProd = !isDev
 
+// --- CONFIG SECTION ---
+// все основные настройки собраны в этой части
+
 // Порт запуска dev-server 
 const PORT = 9000
 // Директория с исходными файлами
-const WORK_DIR = '#src'
+const WORK_DIR = path.resolve(__dirname,'#src')
 // Директория сборки проекта
-const BUILD_DIR = 'dist'
+const BUILD_DIR = path.resolve(__dirname,'dist')
 // Оптимизация - разбиение на чанки
 const SPLIT_CHUNKS = false
+
 // Структура проекта
 const ps = {
+  // базовый html шаблон
   htmlIndexFile: 'index.html',
-  jsIndexFile:'./index.js',
+  // точка входа 
+  // https://webpack.js.org/concepts/entry-points/
+  entry: {
+    main: ['@babel/polyfill',`./index.js`],
+  },
+  // поддерживаемые расширения
+  extensions: ['.js', '.jsx', '.ts', 'json'], 
+  // базовая структура проекта
   src: {
-    root: {path: path.resolve(__dirname,WORK_DIR), alias:'@'},
+    root: {
+      // Директория root
+      path: WORK_DIR, 
+      // алиас для использования, при отсутвии поля "alias" - не создается
+      alias:'@'
+    },
     img: {path: './img/', alias:'@img'},
     public: {path: './public/', alias:'@public'},
     fonts: {path: './fonts/', alias:'@fonts'},
@@ -36,19 +53,51 @@ const ps = {
     src: {path: './src/', alias:'@src'},
   }, 
   dist: {
-    root: {path: path.resolve(__dirname,BUILD_DIR)},
-    js: {devMode:'[name]', prodMode:'[name].[hash]'},
-    css: {devMode:'[name]', prodMode:'[name].[hash].min'}
+    // корневой каталог для сбокри
+    root: {path: BUILD_DIR},
+    // js bundle
+    // https://webpack.js.org/configuration/output/#outputfilename
+    js: {
+      // шаблон названия файлов в режиме разработки
+      devMode:'[name]', 
+      // шаблон названия файлов в режиме production-сборки
+      prodMode:'[name].[hash]'
+    },
+    // css bundle
+    css: {
+      devMode:'[name]', 
+      prodMode:'[name].[hash].min'
+    }
   },
+  // Копирование директорий в сборку
   copyDirectory: [
-    { from: "./public/", to: "./public/" },
-    { from: "./img/", to: "./img/" },
-    { from: "./fonts/", to: "./fonts/" },
+    { 
+      from: "./public/", 
+      to: "./public/", 
+      noErrorOnMissing: true // при отсутвии файлов для копирования(пустая директория) - не выдавать ошибку 
+    },
+    { from: "./img/", to: "./img/", noErrorOnMissing: true },
+    { from: "./fonts/", to: "./fonts/", noErrorOnMissing: true },
   ]
 }
 
-const filename = ext => isDev ? ps.dist[ext].devMode +`.${ext}` : ps.dist[ext].prodMode +`.${ext}`
+// --- /CONFIG SECTION ---
 
+const filename = ext => isDev ? ps.dist[ext].devMode +`.${ext}` : ps.dist[ext].prodMode +`.${ext}`
+// Проверка и сборка alias
+const getAliases = ps => {  
+  const result = {}
+  for (let key in ps.src) {
+    if (ps.src[key].hasOwnProperty('alias')) {
+      if (ps.src[key]['alias'].length > 0) {
+        result[`${ps.src[key].alias}`] = path.resolve(__dirname, WORK_DIR, ps.src[key].path) 
+      }
+    }
+  }
+  return result;
+}
+
+// Оптимизация при сборке
 const optimization = (param = SPLIT_CHUNKS) => {
   const splitChunks = param ? {chunks: 'all'} : {};  
   return {
@@ -106,11 +155,9 @@ const babelOptions = preset => {
       '@babel/plugin-proposal-class-properties'
     ]
   }
-  
   if (preset) {
     opts.presets.push(preset)
   }
-
   return opts
 }
 
@@ -118,28 +165,19 @@ module.exports = {
   // путь к рабочей директории проекта
   context: ps.src.root.path,
   mode: 'development',
-  entry:
-  {
-    main: ['@babel/polyfill',ps.jsIndexFile],
-  },
+  entry: ps.entry,
   output: {
     filename: filename('js'), 
     path: ps.dist.root.path
   },
   resolve: {
-    extensions: ['.js', '.json'],
-    alias: {
-      '@': path.resolve(__dirname, '#src'),
-      '@public': path.resolve(__dirname, '#src/public'),
-      '@img': path.resolve(__dirname, '#src/img'),
-      '@src': path.resolve(__dirname, '#src/src'),
-      '@fonts': path.resolve(__dirname, '#src/fonts'),
-    }
+    extensions: ps.extensions,
+    alias: getAliases(ps)
   },
   optimization: optimization(),
   devtool: isDev ? 'inline-source-map' : false,
   devServer: {
-    contentBase: path.resolve(__dirname, WORK_DIR),
+    contentBase: WORK_DIR,
     open: true,
     compress: true,
     port: PORT,
@@ -193,27 +231,9 @@ module.exports = {
               name: '[path][name].[ext]',
             }
           },
-          { // Минимизация изображений 
-            loader: 'image-webpack-loader',
-            options: {
-              mozjpeg: {
-                progressive: true,
-              },
-              optipng: {
-                enabled: false,
-              },
-              pngquant: {
-                quality: [0.65, 0.90],
-                speed: 4
-              },
-              gifsicle: {
-                interlaced: false,
-              },
-              webp: {
-                quality: 75
-              }
-            }
-          }
+          // { // Минимизация изображений 
+          //   loader: 'image-webpack-loader',
+          // }
         ]
       },
       { // JS - лоадер

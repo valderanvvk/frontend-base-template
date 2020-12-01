@@ -1,20 +1,39 @@
 # WEBPACK - Базовый шаблон (frontend)
 
-**версия webpack:** 4<br>
-**поддержка:**: JavaScript, TypeScript, React, Sass(Scss)
+**версия webpack:** 4 / 5<br>
+**поддержка:**: JavaScript, TypeScript, React, Sass(Scss)<br>
 **сборка содержит**:<br>
 
 - Добавление normalize.css<br>
 - Препроцессор Sass(Scss)<br>
 - Минимизация css<br>
 - Минимизация Js<br>
-- Оптимизация изображений<br>
+- React + JSX
 - @Babel пресеты<br>
 - @babel/polyfill<br>
 - @babel/preset-react<br>
 - @babel/preset-typescript<br>
 - source-map<br>
 - анализ сборки при помощи webpack-bundle-analyzer (npm run stats)
+
+### Информация:
+
+Быстрое разворачивание шаблона для лендингов или маленьких web-приложений  
+Интегрирован React - https://ru.reactjs.org/
+
+Для работы с TypeScript - необходимо его установить и настроить самостоятельно
+(для информации - http://typescript-lang.ru/docs/Basic%20Types.html)
+
+Основные настройки вынесены в блок --- CONFIG SECTION --- файла webpack.config.js  
+Этих настроек мне вполне хватает. В любом случае - все в руках читающего. Можно вообще снести все и сделать самому :-P.
+
+### Установка:
+
+- Клонируем или качаем из репозитория
+  (как это делать: https://docs.github.com/en/free-pro-team@latest/github/using-git/which-remote-url-should-i-use)
+
+- набираем npm install
+  (для работы необходимо https://nodejs.org/ru/)
 
 ## Структура проекта:
 
@@ -36,8 +55,8 @@
 **./dist/fonts** - Шрифты проекта из ./#src/fonts<br>
 **./dist/public** - Файлы из директории ./#src/public<br>
 **./dist/img** - Изображения размещенные в ./#src/img<br>
-**./dist/main.js** - Запускаемый главный файл JS<br>
-**./dist/main.min.css** - Стили в формате min<>
+**./dist/main.js** - Запускаемый главный файл JS (опционально, меняется в настройках)<br>
+**./dist/main.min.css** - Стили в формате min (опционально, меняется в настройках)<br>
 
 ### Скрипты запуска:
 

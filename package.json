@@ -1,11 +1,13 @@
 {
   "name": "frontend-base-template",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A basic template for developing web-applications(JavaScript, React, TypeScript) with Webpack",
   "main": "index.js",
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "normalize.css": "^8.0.1"
+    "normalize.css": "^8.0.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
   },
   "browserslist": "> 0.25%, not dead",
   "devDependencies": {
@@ -45,7 +47,7 @@
     "url": ""
   },
   "keywords": [],
-  "author": "Vladimir Kundryukov <v.kundryukov@gmail.com>",
+  "author": "Vladimir Kundryukov <v.kundryukov@yandex.ru>",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/valderanvvk/frontend-base-template/issues"

@@ -3,5 +3,10 @@ import 'normalize.css'
 // Подключим основные стили
 import './sass/style.sass'
 
-// Загрузка основоного файла скрипdddтов
-import './src/main.js'
+// Загрузка файла скриптов
+import '@src/main.js'
+
+import webpac_logo from '@public/webpack-logo.jpg'
+document.querySelector('.maintext__logo-img').src = webpac_logo
+
+import '@src/reactTest'
