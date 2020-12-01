@@ -1,6 +1,6 @@
 # WEBPACK - Базовый шаблон (frontend)
 
-**версия webpack:** 5<br>
+**версия webpack:** 4<br>
 **поддержка:**: JavaScript, TypeScript, React, Sass(Scss)
 **сборка содержит**:<br>
 
@@ -14,6 +14,7 @@
 - @babel/preset-react<br>
 - @babel/preset-typescript<br>
 - source-map<br>
+- анализ сборки при помощи webpack-bundle-analyzer (npm run stats)
 
 ## Структура проекта:
 
