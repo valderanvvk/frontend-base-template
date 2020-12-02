@@ -26,6 +26,12 @@ const WORK_DIR = path.resolve(__dirname,'#src')
 const BUILD_DIR = path.resolve(__dirname,'dist')
 // Оптимизация - разбиение на чанки
 const SPLIT_CHUNKS = false
+// Включение webpack's HotModuleReplacement (Обновление при изменении файлов)
+// при проблемах обновления контента установить HOT_MODULE_REPLACEMENT = false
+// так же можно (hot:false, liveReload:true, watchContentBase:true)
+const HOT_MODULE_REPLACEMENT = true
+// Открытие в новом окне браузера при запуске
+const START_IN_NEW_WINDOW = true
 
 // Структура проекта
 const ps = {
@@ -178,10 +184,10 @@ module.exports = {
   devtool: isDev ? 'inline-source-map' : false,
   devServer: {
     contentBase: WORK_DIR,
-    open: true,
+    open: START_IN_NEW_WINDOW,
     compress: true,
     port: PORT,
-    hot: true
+    hot: HOT_MODULE_REPLACEMENT,
   },
   plugins: [
     new HTMLWebpackPlugin({

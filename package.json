@@ -39,6 +39,7 @@
     "dev": "cross-env NODE_ENV=development webpack --mode development",
     "watch": "cross-env NODE_ENV=development webpack --mode development --watch",
     "start": "cross-env NODE_ENV=development webpack serve",
+    "start:lan": "cross-env NODE_ENV=development webpack serve --host 0.0.0.0",
     "build": "cross-env NODE_ENV=production webpack --mode production",
     "stats": "webpack --json > stats.json && webpack-bundle-analyzer stats.json"
   },
